@@ -25,6 +25,5 @@ public class JoinRoomCommand implements Command {
         }
         logger.log(Level.INFO, participant.getIdentifier() + " joining " + roomName);
         return ChatApplicationData.getInstance().joinRoom(roomName, participant);
-
     }
 }

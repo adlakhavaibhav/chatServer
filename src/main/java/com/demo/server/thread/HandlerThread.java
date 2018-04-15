@@ -141,7 +141,7 @@ public class HandlerThread implements Runnable {
                 return null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error while parsing request", e);
         }
         return null;
 

@@ -20,9 +20,7 @@ public class SendMsgCommand implements Command {
     }
 
     public String execute() {
-
         return ChatApplicationData.getInstance().broadCastMessage(roomName, message,sender);
-
     }
 
 }

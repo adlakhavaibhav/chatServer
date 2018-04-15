@@ -1,8 +1,8 @@
-##Introduction
+## Introduction
 
 This is simple chat server, that uses nio.It allows multiple clients to connect to it, join one or more rooms, and send and receive messages from those rooms.
 
-##Start the server 
+## Start the server 
 
 1) mvn clean install
 2) cd target/classes/
