@@ -28,7 +28,7 @@ public class AcceptorThread implements Runnable {
             SocketChannel socketChannel = serverSocketChannel.accept();
             if (socketChannel != null) {
                 System.out.println("Connection Accepted by ServerCore" + socketChannel.getRemoteAddress());
-                new HandlerThread(selector, socketChannel);
+                new Handler(selector, socketChannel);
             }
 
         } catch (IOException ex) {

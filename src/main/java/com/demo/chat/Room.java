@@ -34,12 +34,24 @@ class Room {
         }
     }
 
+    void removeParticipant(Participant participant) {
+        readWriteLock.writeLock().lock();
+        try {
+            this.participants.remove(participant);
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
+    }
+
     String broadCastMsg(String msg, Participant sender) throws IOException {
         readWriteLock.readLock().lock();
         try {
             if (!this.participants.contains(sender)) {
                 return "Please join " + this.name + " before trying to send messages";
             }
+
+            //TODO: parallelize this
+
             for (Participant participant : participants) {
                 logger.log(Level.INFO, "Sending message to " + participant.getIdentifier() + " as " + msg + " in room " + this.name);
                 participant.sendMessage(msg);
@@ -51,12 +63,5 @@ class Room {
     }
 
 
-    void removeParticipant(Participant participant) {
-        readWriteLock.writeLock().lock();
-        try {
-            this.participants.remove(participant);
-        } finally {
-            readWriteLock.writeLock().unlock();
-        }
-    }
+
 }

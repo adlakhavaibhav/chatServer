@@ -17,21 +17,21 @@ import java.util.logging.Logger;
 /**
  * created by vaibhava on 15/04/18
  **/
-public class HandlerThread implements Runnable {
+public class Handler implements Runnable {
 
     private static final String JOIN = "JOIN";
     private static final String SEND = "SEND";
     private static final int READING = 0, SENDING = 1;
     private final SocketChannel socketChannel;
     private final SelectionKey selectionKey;
-    private Logger logger = Logger.getLogger(HandlerThread.class.getName());
+    private Logger logger = Logger.getLogger(Handler.class.getName());
     private ByteBuffer input = ByteBuffer.allocate(1024);
     private int state = READING;
 
     private Command currentCommand;
 
 
-    HandlerThread(Selector selector, SocketChannel c) throws IOException {
+    Handler(Selector selector, SocketChannel c) throws IOException {
         socketChannel = c;
         c.configureBlocking(false);
         selectionKey = socketChannel.register(selector, 0);

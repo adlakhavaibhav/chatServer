@@ -1,6 +1,6 @@
 package com.demo.chat;
 
-import com.demo.server.thread.HandlerThread;
+import com.demo.server.thread.Handler;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -9,17 +9,17 @@ import java.util.Objects;
  **/
 public class Participant {
 
-    private HandlerThread handlerThread;
+    private Handler handler;
     private String identifier;
 
 
-    public Participant(HandlerThread handlerThread, String identifier) {
-        this.handlerThread = handlerThread;
+    public Participant(Handler handler, String identifier) {
+        this.handler = handler;
         this.identifier = identifier;
     }
 
     void sendMessage(String message) throws IOException {
-        this.handlerThread.send(message);
+        this.handler.send(message);
     }
 
     @Override
