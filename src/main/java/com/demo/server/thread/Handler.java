@@ -36,7 +36,7 @@ public class Handler implements Runnable {
         c.configureBlocking(false);
         selectionKey = socketChannel.register(selector, 0);
         selectionKey.attach(this);
-        selectionKey.interestOps(SelectionKey.OP_READ);
+        selectionKey.interestOps(SelectionKey.OP_READ);     // intersted in read operations.
         selector.wakeup();
     }
 

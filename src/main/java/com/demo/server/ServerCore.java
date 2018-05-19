@@ -31,7 +31,7 @@ public class ServerCore implements Runnable {
         serverSocketChannel.socket().bind(new InetSocketAddress(port));
         serverSocketChannel.configureBlocking(false);
 
-        SelectionKey selectionKey = serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+        SelectionKey selectionKey = serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT); // intereseted in accepting connections.
         selectionKey.attach(new AcceptorThread(selector, serverSocketChannel));
     }
 
@@ -40,13 +40,20 @@ public class ServerCore implements Runnable {
         logger.log(Level.INFO, "SimpleChatServer started on: " + serverSocketChannel.socket().getLocalPort());
         try {
             while (!Thread.interrupted()) {
-                selector.select();
-                Set selected = selector.selectedKeys();
-                Iterator it = selected.iterator();
+                selector.selectNow();
+                Set selectedKeys = selector.selectedKeys();
+                Iterator it = selectedKeys.iterator();
                 while (it.hasNext()) {
-                    dispatch((SelectionKey) (it.next()));
+                    SelectionKey key = (SelectionKey) (it.next());
+
+                    if(!key.isValid()){
+                        continue;
+                    }
+                    if(key.isAcceptable()) {
+                        dispatch(key);
+                    }
                 }
-                selected.clear();
+                selectedKeys.clear();
             }
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "Error on event loop", ex);

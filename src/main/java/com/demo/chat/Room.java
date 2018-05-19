@@ -3,6 +3,8 @@ package com.demo.chat;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
@@ -52,7 +54,7 @@ class Room {
 
             for (Participant participant : participants) {
                 logger.log(Level.INFO, "Sending message to " + participant.getIdentifier() + " as " + msg + " in room " + this.name);
-                participant.sendMessage(msg);
+                sendMsgAsync(msg, participant);
             }
         } finally {
             readWriteLock.readLock().unlock();
@@ -60,5 +62,23 @@ class Room {
         return "OK";
     }
 
+    private void sendMsgAsync(String msg, Participant receiver) {
+        ExecutorService executor = Executors.newFixedThreadPool(20);
+
+        Runnable worker = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    receiver.sendMessage(msg);
+                } catch (IOException ioe) {
+                    logger.log(Level.SEVERE, " Error Sending message to " + receiver.getIdentifier() + " as " + msg);
+                }
+            }
+        };
+        executor.execute(worker);
+    }
+
 
 }
+
+
